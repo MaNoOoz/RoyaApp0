@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="Yaman Alkhateeb" />
+  <settings default="ME">
+    <LanguageOptions name="JAVA">
+      <option name="fileLocation" value="3" />
+    </LanguageOptions>
+  </settings>
 </component>

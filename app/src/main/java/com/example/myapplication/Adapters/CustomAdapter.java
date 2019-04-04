@@ -5,24 +5,21 @@ package com.example.myapplication.Adapters;
  */
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.POJO.Bnood;
 import com.example.myapplication.R;
 
 import java.util.List;
-import java.util.Set;
 
-public class CustomAdapter  extends  BaseAdapter {
+public class CustomAdapter extends BaseAdapter {
+
     Activity activity;
     List<Bnood> users;
     LayoutInflater inflater;
@@ -35,10 +32,10 @@ public class CustomAdapter  extends  BaseAdapter {
     }
 
     public CustomAdapter(Activity activity, List<Bnood> users) {
-        this.activity   = activity;
-        this.users      = users;
+        this.activity = activity;
+        this.users = users;
 
-        inflater        = activity.getLayoutInflater();
+        inflater = activity.getLayoutInflater();
     }
 
 
@@ -58,47 +55,81 @@ public class CustomAdapter  extends  BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int itemIndex, View convertView, ViewGroup viewGroup) {
 
-        ViewHolder holder = null;
+        ViewHolder viewHolder = null;
 
-        if (view == null){
+        if (convertView != null) {
+            viewHolder = (ViewHolder) convertView.getTag();
+        } else {
+            convertView = inflater.inflate(R.layout.spinner_items_status, viewGroup, false);
 
-            view = inflater.inflate(R.layout.spinner_items_status, viewGroup, false);
+            CheckBox listItemCheckbox = convertView.findViewById(R.id.checkbox);
 
-            holder = new ViewHolder();
+            TextView listItemText = convertView.findViewById(R.id.text);
 
-            holder.tvUserName = view.findViewById(R.id.text);
-            holder.ivCheckBox =  view.findViewById(R.id.checkbox);
+            viewHolder = new ViewHolder(convertView);
 
-            view.setTag(holder);
-        }else
-            holder = (ViewHolder)view.getTag();
+            viewHolder.setItemCheckbox(listItemCheckbox);
 
-        Bnood model = users.get(i);
+            viewHolder.setItemTextView(listItemText);
 
-        holder.tvUserName.setText(model.getUserName());
+            convertView.setTag(viewHolder);
+        }
 
-        if (model.isSelected())
-            holder.ivCheckBox.setBackgroundResource(R.drawable.checked);
+        Bnood listViewItemDto = users.get(itemIndex);
+        viewHolder.getItemCheckbox().setChecked(listViewItemDto.isSelected());
+        viewHolder.getItemTextView().setText(listViewItemDto.getUserName());
 
-        else
-            holder.ivCheckBox.setBackgroundResource(R.drawable.check);
-
-        return view;
-
+        return convertView;
     }
 
-    public void updateRecords(List<Bnood> users){
-        this.users = users;
 
+//            view = inflater.inflate(R.layout.spinner_items_status, viewGroup, false);
+//            holder = new ViewHolder(view);
+//            holder.itemTextView = view.findViewById(R.id.text);
+//            holder.itemCheckbox = view.findViewById(R.id.checkbox);
+//            view.setTag(holder);
+//        } else
+//            holder = (ViewHolder) view.getTag();
+//        Bnood model = users.get(i);
+//        holder.itemTextView.setText(model.getUserName());
+//        if (model.isSelected())
+//            holder.itemCheckbox.setChecked(false);
+//        else
+//            holder.itemCheckbox.setChecked(true);
+//        return view;
+
+
+    public void updateRecords(List<Bnood> users) {
+        this.users = users;
         notifyDataSetChanged();
     }
 
-    class ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private CheckBox itemCheckbox;
 
-        TextView tvUserName;
-        CheckBox ivCheckBox;
+        private TextView itemTextView;
 
+        public ViewHolder(View itemView) {
+            super(itemView);
+            this.setIsRecyclable(false);
+        }
+
+        public CheckBox getItemCheckbox() {
+            return itemCheckbox;
+        }
+
+        public void setItemCheckbox(CheckBox itemCheckbox) {
+            this.itemCheckbox = itemCheckbox;
+        }
+
+        public TextView getItemTextView() {
+            return itemTextView;
+        }
+
+        public void setItemTextView(TextView itemTextView) {
+            this.itemTextView = itemTextView;
+        }
     }
 }

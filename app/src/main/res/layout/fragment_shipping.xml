@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/spacing_middle"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_large"
+        android:textDirection="rtl">
+        
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:fontFamily="@font/cairo_semibold"
+                    android:gravity="center"
+                    android:text="إستمارة تفتيش"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/blue_600"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:fontFamily="@font/cairo_semibold" />
+                
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_weight="3"
+                        android:gravity="center|start"
+                        android:layoutDirection="rtl"
+                        android:text="دوري" />
+                    
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_weight="3"
+                        android:gravity="center|start"
+                        android:layoutDirection="rtl"
+                        android:text="مفاجئ" />
+                    
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_weight="3"
+                        android:gravity="center|start"
+                        android:layoutDirection="rtl"
+                        android:text="شكوى" />
+                </RadioGroup>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:orientation="horizontal">
+                    
+                    <EditText
+                        style="@style/EditText.Flat.Grey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:background="@drawable/edit_text_round_bg_outline"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:gravity="center"
+                        android:hint="إسم المحل"
+                        android:inputType="none"
+                        android:minHeight="@dimen/spacing_xmlarge"
+                        android:text="" />
+                    
+                    <EditText
+                        style="@style/EditText.Flat.Grey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:background="@drawable/edit_text_round_bg_outline"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:gravity="center"
+                        android:hint="تاريخ الإصدار"
+                        android:inputType="none"
+                        android:minHeight="@dimen/spacing_xmlarge"
+                        android:text="" />
+                    
+                    <EditText
+                        style="@style/EditText.Flat.Grey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:background="@drawable/edit_text_round_bg_outline"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:gravity="center"
+                        android:hint="رقم الرخصة"
+                        android:inputType="none"
+                        android:minHeight="@dimen/spacing_xmlarge"
+                        android:text="" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:orientation="horizontal">
+                    
+                    <TextView
+                        style="@style/EditText.Flat.Grey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:background="@drawable/edit_text_round_bg_outline"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:gravity="center"
+                        android:minHeight="@dimen/spacing_xmlarge"
+                        android:text="ساعة التفتيش"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/grey_40"
+                        android:textSize="14sp" />
+                    
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:tint="@color/grey_40"
+                        app:srcCompat="@drawable/ic_event" />
+                    
+                    <TextView
+                        style="@style/EditText.Flat.Grey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:background="@drawable/edit_text_round_bg_outline"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:gravity="center"
+                        android:minHeight="?attr/actionBarSize"
+                        android:text="تاريخ التفتيش"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/grey_40"
+                        android:textSize="14sp" />
+                    
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:tint="@color/grey_40"
+                        app:srcCompat="@drawable/ic_event" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_middle"
+            android:visibility="visible"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:fontFamily="@font/cairo_semibold"
+                    android:gravity="center"
+                    android:text="القائم بالتفتيش"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/blue_600"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:fontFamily="@font/cairo_semibold" />
+                
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:background="@drawable/background">
+                    
+                    <ImageView
+                        android:id="@+id/spinerBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_expand_arrow" />
+                    
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/moftshenList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:entries="@array/mofateshen"
+                        android:gravity="center"
+                        android:minWidth="100dp"
+                        android:spinnerMode="dropdown"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textDirection="rtl" />
+                </RelativeLayout>
+                
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/cairo_semibold"
+                    android:gravity="center"
+                    android:text="البنود"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/blue_600"
+                    android:textStyle="bold" />
+                
+                <ListView
+                    android:id="@+id/listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="@dimen/spacing_middle"
+                    android:layout_weight="1"
+                    android:minHeight="200dp" />
+                
+                <Button
+                    android:id="@+id/addPic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:background="@drawable/btn_rounded_amber"
+                    android:gravity="center"
+                    android:padding="@dimen/spacing_middle"
+                    android:text="إضافة مرفقات"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/blue_50"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/cairo_semibold" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

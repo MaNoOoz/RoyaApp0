@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مراقبي البلدية</string>
+    <string name="title_home">الرئيسية</string>
+    <string name="title_dashboard">لوحة التحكم</string>
+    <string name="title_notifications">الإشعارات</string>
+    <string name="NEXT">التالي</string>
+    <string name="vio_type">نوع المخالفة</string>
+    <string name="payment">نوع المخالفة</string>
+    <string name="vio_details">نوع المخالفة</string>
+</resources>

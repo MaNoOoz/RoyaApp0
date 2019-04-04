@@ -6,7 +6,8 @@ package com.example.myapplication.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class   Item  {
+public class Violation_Type {
+
     @SerializedName("status")
     private Status currentState = null;
 

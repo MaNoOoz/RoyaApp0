@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">مراقبي  البلدية</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="NEXT">Next</string>
+    <string name="payment">الدفع</string>
+    <string name="vio_details">تفاصيل المخالفة</string>
+    <string name="vio_type">نوع المخالفة</string>
+    <string name="HIDE">Hide</string>
+    <array name="countries">
+        <item>جميع الدول</item>
+        <item>السعودية</item>
+        <item>الكويت</item>
+        <item>البحرين</item>
+        <item>الامارات</item>
+        <item>اليمن</item>
+        <item>العراق</item>
+        <item>قطر</item>
+        <item>عمان</item>
+        <item>المغرب</item>
+        <item>مصر</item>
+        <item>سوريا</item>
+        <item>بلد آخر</item>
+    </array>
+    <array name="bnood">
+        <item>المتطقة المحيطة بالمنشأة</item>
+        <item>الأسقف والجدران</item>
+        <item>الأرضيات</item>
+        <item>المورد المائي</item>
+        <item>الصرف الصحي</item>
+        <item>دورات المياه ومغاسل الأيدي</item>
+        <item>التهوية</item>
+        <item>الإضاءة</item>
+        <item>أماكن تواجد الخضروات</item>
+        <item>أماكن التشغيل والتجهيز</item>
+        <item>مستودعات المواد الخام</item>
+        <item>الإشتراطات الصحية الخاصة بالعاملين</item>
+        <item>النظافة العامة</item>
+        <item>المواد الخام</item>
+        <item>مراحل التجهيز التصنيع</item>
+        <item>التجهيز النهائي</item>
+        <item>مستودعات المنتج النهائي</item>
+        <item>شحن المنتح النهائي</item>
+    </array>
+    <array name="mofateshen">
+        <item>يمان الخطيب</item>
+        <item>محمد</item>
+        <item>عامر</item>
+    </array>
+    <array name="status">
+        <item>مناسب</item>
+        <item>غير مناسب</item>
+        <item>حرج</item>
+        <item>غير حرج</item>
+    </array>
+</resources>

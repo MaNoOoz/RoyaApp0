@@ -4,12 +4,12 @@
 
 package com.example.myapplication.POJO;
 
-public class Task {
+public class DailyTask {
     private String lName;
     private String lTitle;
     private String key;
 
-    public Task(String lName, String lTitle, String key) {
+    public DailyTask(String lName, String lTitle, String key) {
         this.lName = lName;
         this.lTitle = lTitle;
         this.key = key;

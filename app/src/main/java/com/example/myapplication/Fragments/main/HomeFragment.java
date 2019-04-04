@@ -1,12 +1,12 @@
 package com.example.myapplication.Fragments.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,35 +16,36 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Adapters.TaskAdapter;
 import com.example.myapplication.POJO.DailyTask;
 import com.example.myapplication.R;
+import com.example.myapplication.ShoppingCheckoutStep;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 /**
  * Created by MaNoOoz on 2/19/2018.
  */
+
 public class HomeFragment extends Fragment {
 
 
     private static final String TAG = "HomeFragment";
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     //    private WebsiteAdapter websiteAdapter;
     private FloatingActionButton fab;
     private TextView tx_TodayDate;
     private ImageButton  chooseDate;
     private ArrayList<DailyTask> dailyTasks;
-    private RecyclerView.Adapter mAdapter;
-    private DailyTask dailyTask;
-
+    DailyTask dailyTask;
+    TaskAdapter taskAdapter;
 //    ========================================================== Lifecycle ========================================================================
 
     @Override
@@ -67,10 +68,13 @@ public class HomeFragment extends Fragment {
         Log.i(TAG, "setAdapter: ");
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
+        dailyTasks = new ArrayList<>();
+
 
 
 
         tx_TodayDate = view.findViewById(R.id.tx_TodayDate);
+        recyclerView = view.findViewById(R.id.dailyTasksList);
         chooseDate = view.findViewById(R.id.bt_TodayDate);
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
         chooseDate.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +87,21 @@ public class HomeFragment extends Fragment {
 //
 ////     textView is the TextView view that should display it
         tx_TodayDate.setText(currentDateTimeString);
+
+        taskAdapter = new TaskAdapter(getActivity(), dailyTasks);
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        dailyTask = new DailyTask("gasd", "sdsds", "hhhsds");
+        dailyTask = new DailyTask("gasd23", "sdsds", "hhhsds");
+        dailyTask = new DailyTask("gasd232", "sdsds23", "hhhsds");
+        dailyTasks.add(dailyTask);
+
+        taskAdapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                changeItem(position, "Clicked");
+            }
+        });
 
 
 //       TODO: 4/2/2019  Replace Static list With Json List
@@ -98,6 +117,11 @@ public class HomeFragment extends Fragment {
 
     }
 
+    public void changeItem(int position, String text) {
+        Toast.makeText(getActivity(), "" + position + text, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), ShoppingCheckoutStep.class);
+        startActivity(intent);
+    }
     @Override
     public void onStart() {
         super.onStart();
