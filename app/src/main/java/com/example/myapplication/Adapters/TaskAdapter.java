@@ -6,7 +6,6 @@ package com.example.myapplication.Adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,14 +49,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        DailyTask dailyTask = dailyTasks.get(i);
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        DailyTask dailyTask = dailyTasks.get(position);
         holder.titleTextView.setText(dailyTask.getlName());
         holder.nameTextView.setText(dailyTask.getlTitle());
         holder.profile_image.setText(dailyTask.getlName().substring(0, 1) + dailyTask.getlTitle().substring(0, 1));
         Random mRandom = new Random();
         int color = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
-        ((GradientDrawable) holder.profile_image.getBackground()).setColor(color);
+        holder.profile_image.setBackgroundColor(color);
     }
 
     @Override

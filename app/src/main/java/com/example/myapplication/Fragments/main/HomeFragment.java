@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     //    private WebsiteAdapter websiteAdapter;
     private FloatingActionButton fab;
     private TextView tx_TodayDate;
-    private ImageButton  chooseDate;
+    private ImageButton chooseDate;
     private ArrayList<DailyTask> dailyTasks;
     DailyTask dailyTask;
     TaskAdapter taskAdapter;
@@ -71,8 +71,6 @@ public class HomeFragment extends Fragment {
         dailyTasks = new ArrayList<>();
 
 
-
-
         tx_TodayDate = view.findViewById(R.id.tx_TodayDate);
         recyclerView = view.findViewById(R.id.dailyTasksList);
         chooseDate = view.findViewById(R.id.bt_TodayDate);
@@ -91,10 +89,13 @@ public class HomeFragment extends Fragment {
         taskAdapter = new TaskAdapter(getActivity(), dailyTasks);
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dailyTask = new DailyTask("gasd", "sdsds", "hhhsds");
-        dailyTask = new DailyTask("gasd23", "sdsds", "hhhsds");
-        dailyTask = new DailyTask("gasd232", "sdsds23", "hhhsds");
-        dailyTasks.add(dailyTask);
+
+        dailyTasks.add(0, new DailyTask("bbbb", "bbb", "bb"));
+        dailyTasks.add(1, new DailyTask("aaaaa", "aaa", "aa"));
+        dailyTasks.add(2, new DailyTask("Yaaa", "yaa", "ya"));
+        dailyTasks.add(3, new DailyTask("HHHH", "hhh", "hh"));
+        dailyTasks.add(4, new DailyTask("SSSS", "sss", "ss"));
+        taskAdapter.notifyDataSetChanged();
 
         taskAdapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
             @Override
@@ -122,6 +123,7 @@ public class HomeFragment extends Fragment {
         Intent intent = new Intent(getActivity(), ShoppingCheckoutStep.class);
         startActivity(intent);
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -158,7 +160,6 @@ public class HomeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-
 
 
     //    ========================================================== Callback ========================================================================

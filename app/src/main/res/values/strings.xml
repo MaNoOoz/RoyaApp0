@@ -8,6 +8,9 @@
     <string name="vio_details">تفاصيل المخالفة</string>
     <string name="vio_type">نوع المخالفة</string>
     <string name="HIDE">Hide</string>
+    <string name="todayDate">تاريخ اليوم</string>
+    <string name="todayTasks">المهام اليومية</string>
+    <string name="damyDate">2019/9/22</string>
     <array name="countries">
         <item>جميع الدول</item>
         <item>السعودية</item>
