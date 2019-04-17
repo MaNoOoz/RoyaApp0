@@ -5,10 +5,17 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="8dp">
-  <ImageView
+  
+  <TextView
+      android:id="@+id/id"
       android:layout_width="50dp"
       android:layout_height="50dp"
-      tools:src="@tools:sample/avatars" />
+      android:background="@color/blue_600"
+      android:fontFamily="@font/cairo_semibold"
+      android:gravity="center"
+      android:text="G"
+      android:textColor="@color/warningColor"
+      android:textSize="22sp" />
   
   <LinearLayout
       android:layout_width="wrap_content"
@@ -16,15 +23,15 @@
       android:layout_gravity="center"
       android:orientation="vertical"
       android:padding="5dp">
-    
+  
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="@tools:sample/lorem[3]" />
     
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="@tools:sample/lorem[4]" />
