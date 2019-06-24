@@ -17,16 +17,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Adapters.CommentAdapter;
+import com.example.myapplication.Adapters.GitHubUsersAdapter;
 import com.example.myapplication.Adapters.PostsAdapter;
+import com.example.myapplication.Network.GithubAndroidClint;
 import com.example.myapplication.Network.myApi;
 import com.example.myapplication.POJO.DailyTask;
 import com.example.myapplication.POJO.Post;
+import com.example.myapplication.POJO.User;
 import com.example.myapplication.R;
 import com.example.myapplication.ShoppingCheckoutStep;
+import com.example.myapplication.utlis.url_Manager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -35,6 +40,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -53,15 +59,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class HomeFragment extends Fragment {
-//    https://www.androidauthority.com/retrofit-android-tutorial-906928/
-
+    //    https://www.androidauthority.com/retrofit-android-tutorial-906928/
     private static final String TAG = "HomeFragment";
-    private RecyclerView recyclerView;
+    private ListView listView;
+    private RecyclerView recyclerView2;
     //    private WebsiteAdapter websiteAdapter;
     private FloatingActionButton fab;
     private TextView tx_TodayDate, test;
     private ImageButton chooseDate;
     private ArrayList<DailyTask> dailyTasks;
+    private ArrayList<User> users;
     private Button editBtn, createBtn;
 
     //    private DailyTask dailyTask;
@@ -70,7 +77,12 @@ public class HomeFragment extends Fragment {
     private PostsAdapter postsAdapter;
 
     private myApi myApi;
+    private GithubAndroidClint githubAndroidClint;
+    Retrofit retrofit2;
 //    ========================================================== Lifecycle ========================================================================
+
+    public HomeFragment() {
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -83,10 +95,6 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-
-    public HomeFragment() {
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "setAdapter: ");
@@ -94,9 +102,15 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
 
         dailyTasks = new ArrayList<>();
-        Gson gson = new GsonBuilder().serializeNulls().create();
+        users = new ArrayList<>();
+
+
+        //region Using RetroFit And HttpLoggingInterceptor Libs
+        // ==========================  ====================== \\
+//        Gson gson = new GsonBuilder().serializeNulls().create();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
                     @Override
@@ -111,24 +125,64 @@ public class HomeFragment extends Fragment {
                 .addInterceptor(httpLoggingInterceptor)
                 .build();
 
+
+        OkHttpClient okHttpClient2 = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+
+                        Request orginalRequest = chain.request();
+                        Request NewRequest = orginalRequest.newBuilder().header("InterceptorHeader", "xyz").build();
+                        return chain.proceed(NewRequest);
+
+                    }
+                })
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit3 = new Retrofit.Builder()
+                .baseUrl(url_Manager.GITHUB_API)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+
                 .client(okHttpClient)
                 .build();
+
+
         myApi = retrofit.create(myApi.class);
+
+        Retrofit retrofit2 = new Retrofit.Builder()
+                .baseUrl(url_Manager.GITHUB_API)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient2)
+                .build();
+
+        githubAndroidClint = retrofit2.create(GithubAndroidClint.class);
+
+        //endregion
+
+
+
 //        widgets ============================================================================
-        recyclerView = view.findViewById(R.id.dailyTasksList);
+        recyclerView2 = view.findViewById(R.id.dailyTasksList);
         tx_TodayDate = view.findViewById(R.id.tx_TodayDate);
         test = view.findViewById(R.id.test);
-        recyclerView = view.findViewById(R.id.dailyTasksList);
+        listView = view.findViewById(R.id.githubUsersList);
         chooseDate = view.findViewById(R.id.bt_TodayDate);
         editBtn = view.findViewById(R.id.editPost);
         createBtn = view.findViewById(R.id.createBtn);
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createPost();
+                CreatePostsFromGithub();
+//                test();
             }
         });
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +192,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
 
 
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
@@ -153,8 +206,8 @@ public class HomeFragment extends Fragment {
         tx_TodayDate.setText(currentDateTimeString);
 
 //        taskAdapter = new TaskAdapter(getActivity(), dailyTasks);
-//        recyclerView.setAdapter(taskAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        listView.setAdapter(taskAdapter);
+//        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        dailyTasks.add(0, new DailyTask("bbbb", "bbb", "bb"));
 //        dailyTasks.add(1, new DailyTask("aaaaa", "aaa", "aa"));
 //        dailyTasks.add(2, new DailyTask("Yaaa", "yaa", "ya"));
@@ -189,102 +242,83 @@ public class HomeFragment extends Fragment {
 
     }
 
-//    ========================================================== My Methods ========================================================================
 
-//    private void getPosts() {
-////        Using Map
-//        Map<String, String> parameters = new HashMap<>();
-//        parameters.put("userId", "1");
-//        parameters.put("_sort", "id");
-//        parameters.put("_order", "desc");
-//
-//        Call<List<Post>> call = myApi.getPosts(parameters);
-//
-//        call.enqueue(new Callback<List<Post>>() {
-//            @Override
-//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-//
-//                if (!response.isSuccessful()) {
-//                    test.setText("Code: " + response.code());
-//                    return;
-//                }
-//
-//                List<Post> posts = response.body();
-//                postsAdapter = new PostsAdapter(posts);
-//                postsAdapter.notifyDataSetChanged();
-//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//                recyclerView.setLayoutManager(layoutManager);
-//                //Set the Adapter to the RecyclerView//
-//                recyclerView.setItemViewCacheSize(5);
-//                recyclerView.setAdapter(postsAdapter);
-//
-//                if (posts != null) {
-//                    for (Post post : posts) {
-//                        String content = "";
-//                        content += "\n"+"ID:" + " " + post.getId()+"\n";
-//                        content += "User ID: " + post.getUserId() + "\n";
-//                        content += "Title: " + post.getTitle() + "\n";
-//                        content += "Text: " + post.getText() + "\n\n";
-//
-//                        test.append(content);
-//                    }
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Post>> call, Throwable t) {
-//                test.setText(t.getMessage());
-//            }
-//        });
-//
-//
-//    }
-//    private void getComments() {
-//        Call<List<Comment>> call = myApi.getAllComments(new Integer[]{1,2,3},null,null);
-////        Call<List<Comment>> call = myApi.getComments("posts/3/comments");
-//        //Execute the request asynchronously//
-//        call.enqueue(new Callback<List<Comment>>() {
-//            @Override
-//            //Handle a successful response//
-//            public void onResponse(@NonNull Call<List<Comment>> call, @NonNull Response<List<Comment>> response) {
-//                if (!response.isSuccessful()) {
-//                    test.setText("Code: " + response.code());
-//                    return;
-//                }
-//
-//                List<Comment> usersList = response.body()  ;
-//
-//                commentAdapter = new CommentAdapter(usersList);
-//                commentAdapter.notifyDataSetChanged();
-//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//                recyclerView.setLayoutManager(layoutManager);
-//                //Set the Adapter to the RecyclerView//
-//                recyclerView.setAdapter(commentAdapter);
-//
-//                if (usersList != null) {
-//                    for (Comment comment : usersList) {
-//                        String content = "";
-//                        content += "\n"+"ID:" + " " + comment.getId()+"\n";
-//                        content += "User ID: " + comment.getPostId() + "\n";
-//                        content += "Name: " + comment.getName() + "\n";
-//                        content += "Email: " + comment.getId() + "\n";
-//                        content += "Text: " + comment.getText() + "\n\n";
-//                        test.append(content);
-//                    }
-//                }
-//
-//            }
-//            @Override
-//            //Handle execution failures//
-//            public void onFailure(@NonNull Call<List<Comment>> call, @NonNull Throwable throwable) {
-//                //If the request fails, then display the following toast//
-//                Toast.makeText(getActivity(), "Unable to load users", Toast.LENGTH_SHORT).show();
-//                test.setText(throwable.getMessage());
-//            }
-//        });
-//
-//    }
+
+    //region My Methods
+    public void test() {
+        User user = new User2(123, "John Doe");
+
+        Call<User> call = githubAndroidClint.getUser("manoooz");
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                if (!response.isSuccessful()) {
+                    test.setText("Code: " + response.code());
+                    return;
+                }
+                User user = response.body();
+                String content = "";
+                content += "Code: " + response.code() + "\n";
+                content += "User Name: " + user.getLogin() + "\n";
+                test.setText(content);
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    //endregion
+
+
+
+
+
+
+
+    private void CreatePostsFromGithub() {
+
+
+        Call<List<User>> call = githubAndroidClint.reposForUser("manoooz");
+
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                User user
+                        = new User();
+                List<User> userList = response.body();
+                listView.setAdapter(new GitHubUsersAdapter(getActivity(), userList));
+
+                if (!response.isSuccessful()) {
+                    test.setText("Code: " + response.code());
+                    return;
+                }
+
+
+
+                String content = "";
+                content += "Code: " + response.code() + "\n";
+                content += "ID: " + user.getId() + "\n";
+                content += "User ID: " + user.getLogin() + "\n";
+                content += "Title: " + user.getAvatarUrl() + "\n";
+                content += "Text: " + user.getBlog() + "\n\n";
+
+                test.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                test.setText(t.getMessage());
+
+            }
+        });
+
+    }
 
     private void createPost() {
         Post post = new Post(23, "New Title", "New Text");
@@ -311,10 +345,10 @@ public class HomeFragment extends Fragment {
 //                postsAdapter = new PostsAdapter(posts);
 //                postsAdapter.notifyDataSetChanged();
 //                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//                recyclerView.setLayoutManager(layoutManager);
+//                listView.setLayoutManager(layoutManager);
 //                //Set the Adapter to the RecyclerView//
-//                recyclerView.setItemViewCacheSize(5);
-//                recyclerView.setAdapter(postsAdapter);
+//                listView.setItemViewCacheSize(5);
+//                listView.setAdapter(postsAdapter);
 
                 String content = "";
                 content += "Code: " + response.code() + "\n";
@@ -365,6 +399,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     public void changeItem(int position, String text) {
         Toast.makeText(getActivity(), "" + position + text, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), ShoppingCheckoutStep.class);
@@ -408,6 +443,106 @@ public class HomeFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+    //region TODO LATER
+
+    //    private void getPosts() {
+////        Using Map
+//        Map<String, String> parameters = new HashMap<>();
+//        parameters.put("userId", "1");
+//        parameters.put("_sort", "id");
+//        parameters.put("_order", "desc");
+//
+//        Call<List<Post>> call = myApi.getPosts(parameters);
+//
+//        call.enqueue(new Callback<List<Post>>() {
+//            @Override
+//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+//
+//                if (!response.isSuccessful()) {
+//                    test.setText("Code: " + response.code());
+//                    return;
+//                }
+//
+//                List<Post> posts = response.body();
+//                postsAdapter = new PostsAdapter(posts);
+//                postsAdapter.notifyDataSetChanged();
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//                listView.setLayoutManager(layoutManager);
+//                //Set the Adapter to the RecyclerView//
+//                listView.setItemViewCacheSize(5);
+//                listView.setAdapter(postsAdapter);
+//
+//                if (posts != null) {
+//                    for (Post post : posts) {
+//                        String content = "";
+//                        content += "\n"+"ID:" + " " + post.getId()+"\n";
+//                        content += "User ID: " + post.getUserId() + "\n";
+//                        content += "Title: " + post.getTitle() + "\n";
+//                        content += "Text: " + post.getText() + "\n\n";
+//
+//                        test.append(content);
+//                    }
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Post>> call, Throwable t) {
+//                test.setText(t.getMessage());
+//            }
+//        });
+//
+//
+//    }
+//    private void getComments() {
+//        Call<List<Comment>> call = myApi.getAllComments(new Integer[]{1,2,3},null,null);
+////        Call<List<Comment>> call = myApi.getComments("posts/3/comments");
+//        //Execute the request asynchronously//
+//        call.enqueue(new Callback<List<Comment>>() {
+//            @Override
+//            //Handle a successful response//
+//            public void onResponse(@NonNull Call<List<Comment>> call, @NonNull Response<List<Comment>> response) {
+//                if (!response.isSuccessful()) {
+//                    test.setText("Code: " + response.code());
+//                    return;
+//                }
+//
+//                List<Comment> usersList = response.body()  ;
+//
+//                commentAdapter = new CommentAdapter(usersList);
+//                commentAdapter.notifyDataSetChanged();
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//                listView.setLayoutManager(layoutManager);
+//                //Set the Adapter to the RecyclerView//
+//                listView.setAdapter(commentAdapter);
+//
+//                if (usersList != null) {
+//                    for (Comment comment : usersList) {
+//                        String content = "";
+//                        content += "\n"+"ID:" + " " + comment.getId()+"\n";
+//                        content += "User ID: " + comment.getPostId() + "\n";
+//                        content += "Name: " + comment.getName() + "\n";
+//                        content += "Email: " + comment.getId() + "\n";
+//                        content += "Text: " + comment.getText() + "\n\n";
+//                        test.append(content);
+//                    }
+//                }
+//
+//            }
+//            @Override
+//            //Handle execution failures//
+//            public void onFailure(@NonNull Call<List<Comment>> call, @NonNull Throwable throwable) {
+//                //If the request fails, then display the following toast//
+//                Toast.makeText(getActivity(), "Unable to load users", Toast.LENGTH_SHORT).show();
+//                test.setText(throwable.getMessage());
+//            }
+//        });
+//
+//    }
+    //endregion
 
     //    ========================================================== Callback ========================================================================
 
